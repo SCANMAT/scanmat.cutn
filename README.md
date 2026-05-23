@@ -7,8 +7,21 @@ This is a static lab website. It is organized so group members can update conten
 - `index.html` contains the page content and section order.
 - `css/styles.css` contains all layout, colors, spacing, and responsive design.
 - `js/main.js` contains small interactive behavior for the mobile menu and active navigation links.
+- `assets/photos/` is for group photos, profile pictures, and research visuals.
+- `assets/articles/` is for research article PDFs or publication-related files.
 
 ## Common Updates
+
+### Add Photos or Article Files
+
+Place photos in `assets/photos/` and article files in `assets/articles/`. Then link them from `index.html` using paths such as:
+
+```html
+<img src="assets/photos/group-photo-2026.jpg" alt="Ravindran Research Group members">
+<a href="assets/articles/2023-kruthika-perovskite-solar-cell.pdf">Read article</a>
+```
+
+The gallery currently uses `assets/photos/lab-visual-placeholder.svg`. Replace that file with a real lab image, or change the `src` in `index.html` to point to a new image file.
 
 ### Add or Update a Research Area
 
