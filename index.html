@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ravindran Research Group | Computational Materials Designing Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Color Palette & Variables --- */
+        :root {
+            --bg-dark: #0a1128;
+            --bg-card: #111a36;
+            --primary-blue: #1c3d5a;
+            --accent-cyan: #38bdf8;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --pure-white: #ffffff;
+            --slate-gray: #334155;
+            --border-color: rgba(56, 189, 248, 0.15);
+        }
+
+        /* --- Global Reset & Scroll Behavior --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Abstract Quantum Mesh Background --- */
+        .quantum-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(28, 61, 90, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+                linear-gradient(rgba(56, 189, 248, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            z-index: -1;
+        }
+
+        /* --- Navigation Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(10, 17, 40, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+            color: var(--pure-white);
+            display: flex;
+            flex-direction: column;
+        }
+        .logo span {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        nav ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--accent-cyan);
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        /* --- Global Sections Structural Rules --- */
+        section {
+            padding: 6rem 2rem 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-cyan);
+        }
+
+        /* --- Hero Section --- */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 8rem;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .hero-content h1 {
+            font-size: 3.2rem;
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--pure-white);
+        }
+        .hero-content h1 span {
+            color: var(--accent-cyan);
+        }
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background-color: var(--accent-cyan);
+            color: var(--bg-dark);
+        }
+        .btn-primary:hover {
+            background-color: #7dd3fc;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+        .btn-secondary {
+            border: 1px solid var(--text-muted);
+            color: var(--text-light);
+        }
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--pure-white);
+        }
+        
+        /* Interactive Material Visualizer placeholder box */
+        .hero-visual {
+            position: relative;
+            background: radial-gradient(circle, var(--primary-blue) 0%, var(--bg-card) 70%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .hero-visual::before {
+            content: "\f6ff"; /* Atomic structure icon */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 8rem;
+            color: rgba(56, 189, 248, 0.1);
+            animation: spin 20s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .visual-label {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(10, 17, 40, 0.8);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+        }
+
+        /* --- Research Section --- */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .research-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .research-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+        }
+        .research-icon {
+            font-size: 2.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1.5rem;
+        }
+        .research-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--pure-white);
+        }
+        .research-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- People Section --- */
+        .pi-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2.5rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            align-items: center;
+        }
+        .profile-box {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background-color: var(--primary-blue);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            position: relative;
+        }
+        .profile-box i {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            color: rgba(255,255,255,0.2);
+        }
+        .pi-details h3 {
+            font-size: 1.8rem;
+            color: var(--pure-white);
+            margin-bottom: 0.2rem;
+        }
+        .pi-tag {
+            color: var(--accent-cyan);
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .pi-bio {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .pi-links a, .member-card a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-right: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        .pi-links a:hover, .member-card a:hover {
+            color: var(--pure-white);
+            text-decoration: underline;
+        }
+        
+        .sub-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--pure-white);
+            border-left: 3px solid var(--accent-cyan);
+            padding-left: 10px;
+        }
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+        .member-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .member-card .profile-box {
+            margin-bottom: 1rem;
+        }
+        .member-card h4 {
+            font-size: 1.1rem;
+            color: var(--pure-white);
+            margin-bottom: 0.2rem;
+        }
+        .member-card p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+
+        /* --- Publications Section --- */
+        .pub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .pub-item {
+            background-color: rgba(17, 26, 54, 0.5);
+            border-left: 3px solid var(--primary-blue);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .pub-item:hover {
+            border-left-color: var(--accent-cyan);
+            background-color: var(--bg-card);
+        }
+        .pub-meta {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pub-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--pure-white);
+            margin-bottom: 0.4rem;
+        }
+        .pub-authors {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+        .pub-authors strong {
+            color: var(--text-light);
+        }
+
+        /* --- Gallery & News Section --- */
+        .gallery-news-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+        }
+        .visual-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        .news-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            height: fit-content;
+        }
+        .news-item {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        .news-date {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-family: monospace;
+        }
+        .news-text {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-top: 0.2rem;
+        }
+
+        /* --- Footer Contact Section --- */
+        footer {
+            background-color: #050917;
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 2rem 2rem 2rem;
+            margin-top: 6rem;
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        .footer-col h4 {
+            font-size: 1.1rem;
+            color: var(--pure-white);
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .footer-col p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+        .footer-col i {
+            width: 24px;
+            color: var(--accent-cyan);
+        }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Responsive Queries (Mobile-Friendly optimization) --- */
+        @media(max-width: 968px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .pi-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .pi-container .profile-box {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+            .gallery-news-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+        @media(max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-dark);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1.5rem 2rem;
+                gap: 1.5rem;
+            }
+            nav ul.active {
+                display: flex;
+            }
+            .hero-content h1 {
+                font-size: 2.4rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quantum-bg"></div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                RAVINDRAN RESEARCH GROUP
+                <span>Computational Materials Designing Lab</span>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <nav>
+                <ul id="nav-list">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#research">Research</a></li>
+                    <li><a href="#people">People</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="#gallery">Gallery & News</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <h1>Predicting and Designing <span>Novel Materials</span> via Supercomputers</h1>
+                <p>We combine quantum mechanical principles, High-Performance Computing (HPC), and cutting-edge Density Functional Theory (DFT) frameworks to model structural transitions, electronic configurations, and multi-functional parameters of emergent materials.</p>
+                <div class="hero-buttons">
+                    <a href="#research" class="btn btn-primary">Explore Research</a>
+                    <a href="#publications" class="btn btn-secondary">Our Papers</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-label">lattice_distort_simulation // vasp_run</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="research">
+        <h2 class="section-title">Research Strands</h2>
+        <div class="research-grid">
+            <div class="research-card">
+                <div class="research-icon"><i class="fa-solid fa-charging-station"></i></div>
+                <h3>Energy Storage & Solar Materials</h3>
+                <p>First-principles modeling of thin-film hybrid perovskite tandem architectures, micro-porous MOFs, and solid-state battery pathways to enhance multi-junction electrochemical efficiencies.</p>
+            </div>
+            <div class="research-card">
+                <div class="research-icon"><i class="fa-solid fa-magnet"></i></div>
+                <h3>Magnetism & Phase Stability</h3>
+                <p>Investigating quaternary/half-Heusler configurations, magneto-caloric matrices, and spin-polarized topologies under intense pressures via high-throughput supercomputing workflows.</p>
+            </div>
+            <div class="research-card">
+                <div class="research-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+                <h3>Electronic Structure Calculations</h3>
+                <p>Mapping linear and non-linear optical vectors, carrier metrics, and localized excited states across intricate strongly correlated electron profiles.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="people">
+        <h2 class="section-title">Our Team</h2>
+        
+        <div class="pi-container">
+            <div class="profile-box">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>Photo Placeholder</span>
+            </div>
+            <div class="pi-details">
+                <h3>Prof. Dr. P. Ravindran</h3>
+                <div class="pi-tag">Principal Investigator & Head, SCANMAT Center</div>
+                <p class="pi-bio">Prof. Dr. P. Ravindran is a highly accomplished physicist recognized globally among the Top 1% of scientists in Applied Physics (Stanford/Scopus metrics). He specializes in computational solid-state chemistry and condensed matter physics, managing intensive infrastructure arrays across national boundaries between India and Norway.</p>
+                <div class="pi-links">
+                    <a href="mailto:raviphy@cutn.ac.in"><i class="fa-solid fa-envelope"></i> raviphy@cutn.ac.in</a>
+                    <a href="https://scholar.google.com/citations?user=_gVkdTQAAAAJ" target="_blank"><i class="fa-solid fa-graduation-cap"></i> Google Scholar Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="sub-title">Ph.D. Researchers & Scholars</h3>
+        <div class="people-grid">
+            <div class="member-card">
+                <div class="profile-box"><i class="fa-solid fa-user-gradient"></i><span>Profile Box</span></div>
+                <h4>Research Fellow 1</h4>
+                <p>Postdoctoral Associate</p>
+                <a href="mailto:email@institution.edu"><i class="fa-solid fa-envelope"></i> Email</a>
+            </div>
+            <div class="member-card">
+                <div class="profile-box"><i class="fa-solid fa-user-gradient"></i><span>Profile Box</span></div>
+                <h4>Ph.D. Candidate A</h4>
+                <p>Heusler Alloys Study</p>
+                <a href="mailto:email@institution.edu"><i class="fa-solid fa-envelope"></i> Email</a>
+            </div>
+            <div class="member-card">
+                <div class="profile-box"><i class="fa-solid fa-user-gradient"></i><span>Profile Box</span></div>
+                <h4>Ph.D. Candidate B</h4>
+                <p>Energy Storage Dynamics</p>
+                <a href="mailto:email@institution.edu"><i class="fa-solid fa-envelope"></i> Email</a>
+            </div>
+            <div class="member-card">
+                <div class="profile-box"><i class="fa-solid fa-user-gradient"></i><span>Profile Box</span></div>
+                <h4>Ph.D. Candidate C</h4>
+                <p>Perovskite Photovoltaics</p>
+                <a href="mailto:email@institution.edu"><i class="fa-solid fa-envelope"></i> Email</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="publications">
+        <h2 class="section-title">Selected Publications</h2>
+        <div class="pub-list">
+            <div class="pub-item">
+                <div class="pub-meta">Materials Science in Semiconductor Processing (2023)</div>
+                <div class="pub-title">Discerning the crystal structure and engineering the optoelectronic properties through substitution of divalent cations (M= Zn, N= Ge) in C3H3MxN1-xI3 for solar cell application</div>
+                <div class="pub-authors">G. Kruthika, and <strong>P. Ravindran</strong></div>
+            </div>
+            <div class="pub-item">
+                <div class="pub-meta">International Journal of Hydrogen Energy (2023)</div>
+                <div class="pub-title">First principle study on transition metal ammine borohydrides with amphoteric hydrogen for hydrogen storage applications</div>
+                <div class="pub-authors">S. Kiruthika, and <strong>P. Ravindran</strong></div>
+            </div>
+            <div class="pub-item">
+                <div class="pub-meta">Solid State Sciences (2022)</div>
+                <div class="pub-title">First-principles calculations to investigate new ferromagnetic quaternary Heusler alloys FeZrTiZ (Z= Si, Sn, Pb): compatible for spin polarized device and waste heat recovery</div>
+                <div class="pub-authors">J.B. Sudharsan, M. Srinivasan, P. Ramasamy, M.K. Choudhary, and <strong>P. Ravindran</strong></div>
+            </div>
+            <div class="pub-item">
+                <div class="pub-meta">Physical Review B (2006)</div>
+                <div class="pub-title">Theoretical investigation of magnetoelectric behavior in BiFeO3</div>
+                <div class="pub-authors"><strong>P. Ravindran</strong>, R. Vidya, A. Kjekshus, H. Fjellvåg, and O. Eriksson</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 class="section-title">Gallery & Bulletins</h2>
+        <div class="gallery-news-grid">
+            <div>
+                <h3 class="sub-title" style="margin-bottom: 1.5rem;">Crystal Structure Visualizations</h3>
+                <div class="visual-grid">
+                    <div class="profile-box" style="aspect-ratio: 4/3; background: #132347;"><i class="fa-solid fa-cubes"></i><span>Full Heusler Lattice</span></div>
+                    <div class="profile-box" style="aspect-ratio: 4/3; background: #132347;"><i class="fa-solid fa-network-wired"></i><span>Octahedral Distortions</span></div>
+                </div>
+            </div>
+            <div class="news-panel">
+                <h3 class="sub-title" style="margin-bottom: 1.5rem; border-left-color: var(--accent-cyan);">Lab Bulletins</h3>
+                <div class="news-item">
+                    <div class="news-date">MAY 2026</div>
+                    <div class="news-text">SCANMAT cluster architecture extended with custom structural manipulation scripts optimized for fast Bain path convergence matrix datasets.</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">MARCH 2026</div>
+                    <div class="news-text">Prof. P. Ravindran cited among the top 1% global Applied Physics experts for sustained excellence in multiferroic engineering frameworks.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Lab Affiliation</h4>
+                <p>Simulation Center for Atomic and Nanoscale MATerials (SCANMAT)</p>
+                <p>Department of Physics</p>
+                <p>Central University of Tamil Nadu</p>
+                <p>Neelakudi, Thiruvarur - 610 005, India</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Details</h4>
+                <p><i class="fa-solid fa-envelope"></i> raviphy@cutn.ac.in</p>
+                <p><i class="fa-solid fa-envelope"></i> ponravi67@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i> +91 9489054267</p>
+            </div>
+            <div class="footer-col">
+                <h4>Global Joint Node</h4>
+                <p>Center for Materials Science and Nanotechnology</p>
+                <p>University of Oslo</p>
+                <p>Oslo, Norway</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Ravindran Research Group. All rights reserved.</p>
+            <p>Designed for Advanced Quantum Computational Materials Modeling</p>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+        const navLinks = document.querySelectorAll('#nav-list li a');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navList.classList.remove('active');
+                navLinks.forEach(item => item.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
